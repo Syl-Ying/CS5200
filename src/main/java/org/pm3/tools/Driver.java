@@ -14,6 +14,9 @@ public class Driver {
         JobDao jobDao = JobDao.getInstance();
         CharacterJobDao characterJobDao = CharacterJobDao.getInstance();
 
+        SlotTypeDao slotTypeDao = SlotTypeDao.getInstance();
+        CurrencyDao currencyDao = CurrencyDao.getInstance();
+        CharacterCurrencyDao characterCurrencyDao = CharacterCurrencyDao.getInstance();
         try {
             // 1. Create a new Player
             Player newPlayer = new Player("john_doe", "john.doe@example.com");
@@ -89,10 +92,63 @@ public class Driver {
 
 
 
+            // 1. Create a new SlotType
+            SlotType newSlotType = new SlotType(0, "Helmet");
+            SlotType createdSlotType = slotTypeDao.create(newSlotType);
+            System.out.println("Created SlotType: ID = " + createdSlotType.getSlotID() + ", Name = " + createdSlotType.getName());
+
+            // 2. Retrieve the SlotType by ID
+            SlotType retrievedSlotType = slotTypeDao.getByID(createdSlotType.getSlotID());
+            if (retrievedSlotType != null) {
+                System.out.println("Retrieved SlotType: ID = " + retrievedSlotType.getSlotID() + ", Name = " + retrievedSlotType.getName());
+            } else {
+                System.out.println("SlotType not found.");
+            }
+
+            // 3. Update the SlotType
+            retrievedSlotType.setName("Updated Helmet");
+            SlotType updatedSlotType = slotTypeDao.update(retrievedSlotType);
+            System.out.println("Updated SlotType: ID = " + updatedSlotType.getSlotID() + ", Name = " + updatedSlotType.getName());
+
+            // 4. Retrieve all SlotTypes
+            List<SlotType> allSlotTypes = slotTypeDao.getAll();
+            System.out.println("All SlotTypes:");
+            for (SlotType slotType : allSlotTypes) {
+                System.out.println("ID = " + slotType.getSlotID() + ", Name = " + slotType.getName());
+            }
+
+            // 5. Delete the SlotType
+            slotTypeDao.delete(updatedSlotType.getSlotID());
+            System.out.println("Deleted SlotType with ID: " + updatedSlotType.getSlotID());
+
+            // 1. Create Currency
+            Currency newCurrency = new Currency(0, "Gold", 1000.0, 500.0);
+            Currency createdCurrency = currencyDao.create(newCurrency);
+            System.out.println("Created Currency: " + createdCurrency.getCurrencyID());
+
+            // 2. Retrieve Currency by Id
+            Currency retrievedCurrency = currencyDao.getByID(createdCurrency.getCurrencyID());
+            System.out.println("Retrieved Currency: " + retrievedCurrency.getCurrencyName());
+
+            // 3. Update Currency
+            retrievedCurrency.setCurrencyName("Updated Gold");
+            Currency updatedCurrency = currencyDao.update(retrievedCurrency);
+            System.out.println("Updated Currency: " + updatedCurrency.getCurrencyName());
+
+            // 4. Retrieve all Currency
+            List<Currency> allCurrencies = currencyDao.getAll();
+            System.out.println("All Currencies:");
+            for (Currency currency : allCurrencies) {
+                System.out.println(currency.getCurrencyName());
+            }
+
+            // 5. Delete Currency
+            currencyDao.delete(updatedCurrency.getCurrencyID());
+            System.out.println("Deleted Currency with ID: " + updatedCurrency.getCurrencyID());
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    
 }
+
 
