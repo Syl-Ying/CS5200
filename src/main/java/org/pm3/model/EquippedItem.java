@@ -1,20 +1,19 @@
 package org.pm3.model;
 
-public class EquipItem {
+public class EquippedItem {
   private Characters character;
   private SlotType slotType;
   private Item item;
 
-  public EquipItem() {
+  public EquippedItem() {
   }
 
-  public EquipItem(Characters character, SlotType slotType, Item item) {
+  public EquippedItem(Characters character, SlotType slotType, Item item) {
     this.character = character;
     this.slotType = slotType;
     this.item = item;
   }
 
-  // Getters 和 Setters
   public Characters getCharacter() {
     return character;
   }
