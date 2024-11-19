@@ -13,19 +13,21 @@ public class CharacterAttribute {
         this.attributeName = attributeName;
     }
     
+	// Getters and Setters
 	public int getAttributeID() {
 		return attributeID;
 	}
+
 	public void setAttributeID(int attributeID) {
 		this.attributeID = attributeID;
 	}
+
 	public String getAttributeName() {
 		return attributeName;
 	}
+
 	public void setAttributeName(String attributeName) {
 		this.attributeName = attributeName;
 	}
-    
-    
 
 }

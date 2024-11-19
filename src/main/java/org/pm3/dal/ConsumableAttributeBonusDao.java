@@ -27,7 +27,9 @@ public class ConsumableAttributeBonusDao {
      * 	Create a ConsumableAttributeBonus table
      */
     public ConsumableAttributeBonus create(ConsumableAttributeBonus bonus) throws SQLException {
-        String insertQuery = "INSERT INTO ConsumableAttributeBonus(consumableID, attributeID, bonusPercentage, bonusCap) VALUES (?, ?, ?, ?);";
+        String insertQuery = 
+        "INSERT INTO ConsumableAttributeBonus(consumableID, attributeID, bonusPercentage, bonusCap) " + 
+        "VALUES (?, ?, ?, ?);";
         Connection connection = null;
         PreparedStatement insertStmt = null;
         ResultSet resultKey = null;
@@ -113,7 +115,8 @@ public class ConsumableAttributeBonusDao {
     public ConsumableAttributeBonus update(
     		ConsumableAttributeBonus bonus, double newBonusPercentage, int newBonusCap
     		) throws SQLException {
-        String updateQuery = "UPDATE ConsumableAttributeBonus SET bonusPercentage=?, bonusCap=? WHERE bonusID=?;";
+        String updateQuery = 
+            "UPDATE ConsumableAttributeBonus SET bonusPercentage=?, bonusCap=? WHERE bonusID=?;";
         Connection connection = null;
         PreparedStatement updateStmt = null;
 
