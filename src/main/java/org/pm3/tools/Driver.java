@@ -1,9 +1,9 @@
 package org.pm3.tools;
 
-import org.pm3.dal.*;
-import org.pm3.model.*;
 import java.sql.SQLException;
 import java.util.List;
+import org.pm3.dal.*;
+import org.pm3.model.*;
 
 public class Driver {
 
@@ -23,9 +23,10 @@ public class Driver {
         CharacterAttributeValuesDao characterAttributeValuesDao = CharacterAttributeValuesDao.getInstance();
         GearWeaponAttributeBonusDao gearWeaponAttributeBonusDao = GearWeaponAttributeBonusDao.getInstance();
         ConsumableAttributeBonusDao consumableAttributeBonusDao = ConsumableAttributeBonusDao.getInstance();
+        ItemDao itemDao = ItemDao.getInstance();
 
         try {
-        	// 1. Create a new Player
+            // 1. Create a new Player
             Player newPlayer = new Player("john_doe", "john.doe@example.com");
             Player createdPlayer = playerDao.create(newPlayer);
             Player player2 = new Player("jane_doe", "janedoe@gmail.com");
@@ -44,23 +45,23 @@ public class Driver {
             System.out.println("Retrieved Character: " + retrievedCharacter.getCharacterID()+" FName: "+retrievedCharacter.getCharacterFirstName());
 
             // 4. Update the Character
-            createdCharacter.setCharacterFirstName("Jane"); 
+            createdCharacter.setCharacterFirstName("Jane");
             createdCharacter.setCharacterLastName("Smith");
             createdCharacter.setCurrentMaxHP(120);
             Characters updatedCharacter = charactersDao.update(createdCharacter);
             System.out.println("Updated Character: " + updatedCharacter.getCharacterID()+" FName: "+updatedCharacter.getCharacterFirstName());
-            
+
             // 5. Create a new Job
             Job newJob = new Job("Software EngineerII");
             Job createdJob = jobDao.create(newJob);
             System.out.println("Created Job: " + createdJob.getJobID() + ", " + createdJob.getJobName());
             Job job2 = new Job("Software EngineerI");
             job2 = jobDao.create(job2);
-            
+
             // 6. Retrieve a Job by ID
             Job retrievedJob = jobDao.getJobById(createdJob.getJobID());
             System.out.println("Retrieved Job: " + retrievedJob.getJobID() + ", " + retrievedJob.getJobName());
-            
+
 
             // 7. Update the Job name
             Job updatedJob = jobDao.updateJobName(retrievedJob, "Senior Software Engineer");
@@ -69,24 +70,24 @@ public class Driver {
             // 8: Assign the Job to the Character
             CharacterJob newCharacterJob = new CharacterJob(createdCharacter, createdJob, 10,50,100);
             CharacterJob createdCharacterJob = characterJobDao.create(newCharacterJob);
-            System.out.println("Assigned Job to Character: CharacterJobID = " + 
-                               createdCharacterJob.getJob().getJobName()+ ": "+  createdCharacterJob.getCharacter().getCharacterFirstName());
-            
+            System.out.println("Assigned Job to Character: CharacterJobID = " +
+                createdCharacterJob.getJob().getJobName()+ ": "+  createdCharacterJob.getCharacter().getCharacterFirstName());
+
             // 9: Retrieve the CharacterJob by ID
             CharacterJob retrievedCharacterJob = characterJobDao.getCharacterJob(createdCharacterJob.getCharacter().getCharacterID(),createdCharacterJob.getJob().getJobID());
             if (retrievedCharacterJob != null) {
                 System.out.println("CharacterID = " + retrievedCharacterJob.getCharacter().getCharacterID() +
-                                   ", JobID = " + retrievedCharacterJob.getJob().getJobID());
+                    ", JobID = " + retrievedCharacterJob.getJob().getJobID());
             } else {
                 System.out.println("CharacterJob not found.");
             }
-            
+
             // Step 10: Retrieve all CharacterJobs for the created Character
             List<CharacterJob> allCharacterJobs = characterJobDao.getCharacterJobsByCharacterID(createdCharacter.getCharacterID());
             System.out.println("All Jobs for Character ID = " + createdCharacter.getCharacterID() + ":");
             for (CharacterJob characterJob : allCharacterJobs) {
                 System.out.println(" JobName = " + characterJob.getJob().getJobName() +
-                                   ", Level = " + characterJob.getCharacterJobLevel());
+                    ", Level = " + characterJob.getCharacterJobLevel());
             }
 
 
@@ -136,29 +137,28 @@ public class Driver {
             for (Currency currency : allCurrencies) {
                 System.out.println(currency.getCurrencyName());
             }
-        
-	     	// CharacterAttribute
-            // Create CharacterAttribute
-	        CharacterAttribute newAttribute = new CharacterAttribute("Strength");
-	        CharacterAttribute createdAttribute = characterAttributeDao.create(newAttribute);
-	        System.out.println("Created CharacterAttribute: " + createdAttribute.getAttributeName());
-            // Retrieve CharacterAttribute by AttributeID
-	        CharacterAttribute retrievedAttribute = characterAttributeDao.getByAttributeId(createdAttribute.getAttributeID());
-	        System.out.println("Retrieved CharacterAttribute: " + retrievedAttribute.getAttributeName());
-	
-	        // CharacterAttributeValues
-            // Create CharacterAttribute
-	        CharacterAttributeValues newValue1 = new CharacterAttributeValues(1, createdAttribute.getAttributeID(), 100);
-	        newValue1 = characterAttributeValuesDao.create(newValue1);
-	        System.out.println("Created CharacterAttributeValues01: " + newValue1.getAttributeValue());
-            CharacterAttributeValues newValue2 = new CharacterAttributeValues(2, createdAttribute.getAttributeID(), 200);
-	        newValue2 = characterAttributeValuesDao.create(newValue2);
-	        System.out.println("Created CharacterAttributeValues02: " + newValue2.getAttributeValue());
-            // Retrieve CharacterAttributeValues by CharacterID and AttributeID
-	        CharacterAttributeValues retrievedValue = characterAttributeValuesDao.getByCharAttrById(newValue1.getCharacterID(), 
-                                                                                                    newValue1.getAttributeID());
-	        System.out.println("Retrieved CharacterAttributeValues01: " + retrievedValue.getAttributeValue());
 
+            // CharacterAttribute
+            // Create CharacterAttribute
+            CharacterAttribute newAttribute = new CharacterAttribute("Strength");
+            CharacterAttribute createdAttribute = characterAttributeDao.create(newAttribute);
+            System.out.println("Created CharacterAttribute: " + createdAttribute.getAttributeName());
+            // Retrieve CharacterAttribute by AttributeID
+            CharacterAttribute retrievedAttribute = characterAttributeDao.getByAttributeId(createdAttribute.getAttributeID());
+            System.out.println("Retrieved CharacterAttribute: " + retrievedAttribute.getAttributeName());
+
+            // CharacterAttributeValues
+            // Create CharacterAttribute
+            CharacterAttributeValues newValue1 = new CharacterAttributeValues(1, createdAttribute.getAttributeID(), 100);
+            newValue1 = characterAttributeValuesDao.create(newValue1);
+            System.out.println("Created CharacterAttributeValues01: " + newValue1.getAttributeValue());
+            CharacterAttributeValues newValue2 = new CharacterAttributeValues(2, createdAttribute.getAttributeID(), 200);
+            newValue2 = characterAttributeValuesDao.create(newValue2);
+            System.out.println("Created CharacterAttributeValues02: " + newValue2.getAttributeValue());
+            // Retrieve CharacterAttributeValues by CharacterID and AttributeID
+            CharacterAttributeValues retrievedValue = characterAttributeValuesDao.getByCharAttrById(newValue1.getCharacterID(),
+                newValue1.getAttributeID());
+            System.out.println("Retrieved CharacterAttributeValues01: " + retrievedValue.getAttributeValue());
 
             //Create Slottype
             SlotType newSlotTypeforItem = new SlotType(1, "Waist");
@@ -177,8 +177,8 @@ public class Driver {
             Weapon weaponReturn = WeaponDao.getInstance().create(weapon1);
             Weapon weapon2 = new Weapon("weapon4",20,slotType2,500,false,"weapon",7,11,4,5,7);
             weapon2 = WeaponDao.getInstance().create(weapon2);
-    //        System.out.print("the return weapon id is: " + weaponReturn.getItemID()+". the new return weapon name is: " +weaponReturn.getItemName() + ". new weapon max size is " + weaponReturn.getItemMaxStackSize()+". new weapon slottype is: " + weaponReturn.getSlotType().getSlotID() + ". vendor price is: " + weaponReturn.getItemVendorPrice() + " whether or not it is able to sell: " + weaponReturn.isAbleToSell()+" .item catrgory is: " + weaponReturn.getItemCategory());
-    //        System.out.println("The weapon itemLel is" + weaponReturn.getWeaponItemLevel()+"the weapon required level is" + weaponReturn.getWeaponRequiredLevel() + "the weapon damage done is " + weaponReturn.getWeaponDamageDone() +"the weapon auto attack is" + weaponReturn.getWeaponAutoAttack()+"weapon " );
+            //        System.out.print("the return weapon id is: " + weaponReturn.getItemID()+". the new return weapon name is: " +weaponReturn.getItemName() + ". new weapon max size is " + weaponReturn.getItemMaxStackSize()+". new weapon slottype is: " + weaponReturn.getSlotType().getSlotID() + ". vendor price is: " + weaponReturn.getItemVendorPrice() + " whether or not it is able to sell: " + weaponReturn.isAbleToSell()+" .item catrgory is: " + weaponReturn.getItemCategory());
+            //        System.out.println("The weapon itemLel is" + weaponReturn.getWeaponItemLevel()+"the weapon required level is" + weaponReturn.getWeaponRequiredLevel() + "the weapon damage done is " + weaponReturn.getWeaponDamageDone() +"the weapon auto attack is" + weaponReturn.getWeaponAutoAttack()+"weapon " );
             System.out.println(weaponReturn.toString());
             Weapon weaponbyId = WeaponDao.getInstance().getItembyId(18);
             System.out.println(weaponbyId);
@@ -205,23 +205,23 @@ public class Driver {
             GearWeaponAttributeBonus retrievedBonus = gearWeaponAttributeBonusDao.getGWAByItemIdAndAttributeID(newBonus1.getItemID(), newBonus1.getAttributeID());
             System.out.println("Retrieved GearWeaponAttributeBonus: Bonus Value " + retrievedBonus.getBonusValue());
             // Update the bonus value of GearWeaponAttributeBonus
-            GearWeaponAttributeBonus updatedBonus = gearWeaponAttributeBonusDao.update(retrievedBonus, 999); 
-            System.out.println("Updated GearWeaponAttributeBonus: Bonus Value " + updatedBonus.getBonusValue())
+            GearWeaponAttributeBonus updatedBonus = gearWeaponAttributeBonusDao.update(retrievedBonus, 999);
+            System.out.println("Updated GearWeaponAttributeBonus: Bonus Value " + updatedBonus.getBonusValue());
 
             // ConsumableAttributeBonus
             // Create a new ConsumableAttributeBonus
-            ConsumableAttributeBonus newBonus = new ConsumableAttributeBonus(6, 1, 15.5, 670); 
+            ConsumableAttributeBonus newBonus = new ConsumableAttributeBonus(6, 1, 15.5, 670);
             newBonus = consumableAttributeBonusDao.create(newBonus);
             System.out.println("Created ConsumableAttributeBonus: Bonus Percentage " + newBonus.getBonusPercentage() +
-         		   			   ", Bonus Cap " + newBonus.getBonusCap() );
+                ", Bonus Cap " + newBonus.getBonusCap() );
             // Retrieve the ConsumableAttributeBonus by bonusID
             ConsumableAttributeBonus retrievedConsumableAttributeBonus = consumableAttributeBonusDao.getConsuAttriByBonusId(newBonus.getBonusID());
             System.out.println("Retrieved ConsumableAttributeBonus: Bonus Percentage " + retrievedConsumableAttributeBonus.getBonusPercentage() +
-                    		   ", Bonus Cap " + retrievedConsumableAttributeBonus.getBonusCap());
+                ", Bonus Cap " + retrievedConsumableAttributeBonus.getBonusCap());
             // Update the bonus value of ConsumableAttributeBonus
-            ConsumableAttributeBonus updatedConsumableAttributeBonus = consumableAttributeBonusDao.update(retrievedConsumableAttributeBonus, 19.9, 199); 
+            ConsumableAttributeBonus updatedConsumableAttributeBonus = consumableAttributeBonusDao.update(retrievedConsumableAttributeBonus, 19.9, 199);
             System.out.println("Updated ConsumableAttributeBonus: Bonus Percentage " + updatedConsumableAttributeBonus.getBonusPercentage() +
-                               ", Bonus Cap " + updatedConsumableAttributeBonus.getBonusCap());
+                ", Bonus Cap " + updatedConsumableAttributeBonus.getBonusCap());
 
             // Create a new Inventory
             Inventory inventory1 = new Inventory(character2, newItem1, 10, 1);
@@ -232,21 +232,21 @@ public class Driver {
             // Read the Inventory by ID
             Inventory retrievedInventory = inventoryDao.getInventoryByCharacterAndItem(character2, newItem1);
             System.out.format("Reading Inventory: [itemID=%d, characterID=%d, inventorySlotNumber=%d, currentItemQuantity=%d]\n",
-                    retrievedInventory.getItem().getItemID(), retrievedInventory.getCharacter().getCharacterID(),
-                    retrievedInventory.getInventorySlotNumber(), retrievedInventory.getCurrentItemQuantity());
+                retrievedInventory.getItem().getItemID(), retrievedInventory.getCharacter().getCharacterID(),
+                retrievedInventory.getInventorySlotNumber(), retrievedInventory.getCurrentItemQuantity());
 
             // Update the Inventory
             Inventory updatedInventory = inventoryDao.updateInventory(inventory1, 2);
             System.out.format("Updated Inventory: [itemID=%d, characterID=%d, inventorySlotNumber=%d, currentItemQuantity=%d]\n",
-                    updatedInventory.getItem().getItemID(), updatedInventory.getCharacter().getCharacterID(),
-                    updatedInventory.getInventorySlotNumber(), updatedInventory.getCurrentItemQuantity());
+                updatedInventory.getItem().getItemID(), updatedInventory.getCharacter().getCharacterID(),
+                updatedInventory.getInventorySlotNumber(), updatedInventory.getCurrentItemQuantity());
 
             // Retrieve all Inventories for the created Character
             List<Inventory> allInventories = inventoryDao.getInventoryByCharacter(createdCharacter);
             for (Inventory inventory : allInventories) {
                 System.out.format("Looping inventory: [itemID=%d, characterID=%d, inventorySlotNumber=%d, currentItemQuantity=%d]\n",
-                        inventory.getItem().getItemID(), inventory.getCharacter().getCharacterID(),
-                        inventory.getInventorySlotNumber(), inventory.getCurrentItemQuantity());
+                    inventory.getItem().getItemID(), inventory.getCharacter().getCharacterID(),
+                    inventory.getInventorySlotNumber(), inventory.getCurrentItemQuantity());
             }
 
 
@@ -259,10 +259,8 @@ public class Driver {
             // Read the WeaponAllowedJobs by WeaponID and JobID
             WeaponAllowedJobs retrievedWeaponAllowedJobs = weaponAllowedJobsDao.getWeaponAllowedJobsByWeaponIDAndJobID(weaponReturn.getItemID(), createdJob.getJobID());
             System.out.format("Reading WeaponAllowedJobs: [weaponID=%d, jobID=%d, isAvaibility=%b]\n",
-                    retrievedWeaponAllowedJobs.getWeapon().getItemID(), retrievedWeaponAllowedJobs.getJob().getJobID(),
-                    retrievedWeaponAllowedJobs.isAvailability());
-
-
+                retrievedWeaponAllowedJobs.getWeapon().getItemID(), retrievedWeaponAllowedJobs.getJob().getJobID(),
+                retrievedWeaponAllowedJobs.isAvailability());
 
             // Create a new GearAllowedJobs
             GearAllowedJobs gearAllowedJobs = new GearAllowedJobs(gear1, createdJob, true);
@@ -271,11 +269,135 @@ public class Driver {
             // Read the GearAllowedJobs by GearID and JobID
             GearAllowedJobs retrievedGearAllowedJobs = gearAllowedJobsDao.getGearAllowedJobsByGearIDAndJobID(gear1.getItemID(), createdJob.getJobID());
             System.out.format("Reading GearAllowedJobs: [gearID=%d, jobID=%d, isAvaibility=%b]\n",
-                    retrievedGearAllowedJobs.getGear().getItemID(), retrievedGearAllowedJobs.getJob().getJobID(),
-                    retrievedGearAllowedJobs.isAvaibility());
+                retrievedGearAllowedJobs.getGear().getItemID(), retrievedGearAllowedJobs.getJob().getJobID(),
+                retrievedGearAllowedJobs.isAvaibility());
+
+
+            // 1. Retrieve the SlotType for "mainHand"
+            String mainHandSlotName = "mainHand";
+            SlotType mainHandSlot = slotTypeDao.getAll().stream()
+                .filter(slot -> mainHandSlotName.equals(slot.getName()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("SlotType 'mainHand' not found"));
+
+            // 2. Create a mainHand Item
+            Item mainHandItem = new Item("mainHandItem", 1, mainHandSlot, 1000, true, "Weapon");
+            Item createdMainHandItem = itemDao.create(mainHandItem);
+
+            System.out.println("Created Item for mainHand:");
+            System.out.println("Item ID: " + createdMainHandItem.getItemID());
+            System.out.println("Item Name: " + createdMainHandItem.getItemName());
+            System.out.println("Slot Type: " + createdMainHandItem.getSlotType().getName());
+
+            // 3. Retrieve the Character
+            Characters existingCharacter = charactersDao.getCharacterByID(createdCharacter.getCharacterID());
+
+            // 4. Equip the mainHand Item
+            EquippedItem mainHandEquippedItem = new EquippedItem(existingCharacter, mainHandSlot, createdMainHandItem);
+            EquippedItem createdEquippedItem = EquippedItemDao.getInstance().create(mainHandEquippedItem);
+
+            System.out.println("Equipped Item successfully:");
+            System.out.println("Character ID: " + createdEquippedItem.getCharacter().getCharacterID());
+            System.out.println("Slot Type: " + createdEquippedItem.getSlotType().getName());
+            System.out.println("Item ID: " + createdEquippedItem.getItem().getItemID());
+            System.out.println("Item Name: " + createdEquippedItem.getItem().getItemName());
+
+            // 5. Verify the mainHand Item is equipped by the Character
+            EquippedItem retrievedEquippedItem = EquippedItemDao.getInstance().getEquippedItemByCharacterIDAndSlotID(
+                existingCharacter.getCharacterID(),
+                mainHandSlot.getSlotID()
+            );
+            if (retrievedEquippedItem != null) {
+                System.out.println("Verified EquippedItem for mainHand:");
+                System.out.println("Character ID: " + retrievedEquippedItem.getCharacter().getCharacterID());
+                System.out.println("Slot Type: " + retrievedEquippedItem.getSlotType().getName());
+                System.out.println("Item Name: " + retrievedEquippedItem.getItem().getItemName());}
+
+            // 6. Ensure that the mainHand slot always has at least one equipped item.
+            //    For testing the delete functionality, add another EquippedItem to the "head" slot: Retrieve the SlotType for "head".
+            String headSlotName = "head";
+            SlotType headSlot = slotTypeDao.getAll().stream()
+                .filter(slot -> headSlotName.equals(slot.getName()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("SlotType 'head' not found"));
+
+            // 7. Create a head Item
+            Item headItem = new Item("headItem", 1, headSlot, 500, true, "Armor");
+            Item createdHeadItem = itemDao.create(headItem);
+
+            System.out.println("Created Item for head:");
+            System.out.println("Item ID: " + createdHeadItem.getItemID());
+            System.out.println("Item Name: " + createdHeadItem.getItemName());
+            System.out.println("Slot Type: " + createdHeadItem.getSlotType().getName());
+
+            // 8. Equip the head Item
+            EquippedItem headEquippedItem = new EquippedItem(existingCharacter, headSlot, createdHeadItem);
+            EquippedItem createdHeadEquippedItem = EquippedItemDao.getInstance().create(headEquippedItem);
+
+            System.out.println("Equipped Item successfully:");
+            System.out.println("Character ID: " + createdHeadEquippedItem.getCharacter().getCharacterID());
+            System.out.println("Slot Type: " + createdHeadEquippedItem.getSlotType().getName());
+            System.out.println("Item ID: " + createdHeadEquippedItem.getItem().getItemID());
+            System.out.println("Item Name: " + createdHeadEquippedItem.getItem().getItemName());
+
+            // 9. Verify the head Item is equipped by the Character
+            EquippedItem retrievedHeadEquippedItem = EquippedItemDao.getInstance().getEquippedItemByCharacterIDAndSlotID(
+                existingCharacter.getCharacterID(),
+                headSlot.getSlotID()
+            );
+            if (retrievedHeadEquippedItem != null) {
+                System.out.println("Verified EquippedItem for head:");
+                System.out.println("Character ID: " + retrievedHeadEquippedItem.getCharacter().getCharacterID());
+                System.out.println("Slot Type: " + retrievedHeadEquippedItem.getSlotType().getName());
+                System.out.println("Item Name: " + retrievedHeadEquippedItem.getItem().getItemName());
+            }
+
+            // 1. Retrieve all equipped items for the given character
+            List<EquippedItem> equippedItems = EquippedItemDao.getInstance().getByCharacterID(existingCharacter.getCharacterID());
+
+            // 2. Print the equipped items
+            System.out.println("Equipped Items for Character ID: " + existingCharacter.getCharacterID());
+            for (EquippedItem equippedItem : equippedItems) {
+                System.out.println("Slot Type: " + equippedItem.getSlotType().getName() +
+                    ", Item Name: " + equippedItem.getItem().getItemName() +
+                    ", Item ID: " + equippedItem.getItem().getItemID());
+            }
+
+            // 1. Retrieve an existing EquippedItem to update
+            if (!equippedItems.isEmpty()) {
+                EquippedItem equippedItemToUpdate = equippedItems.get(0); // Choose the first equipped item
+                System.out.println("Equipped Item before update:");
+                System.out.println("Slot Type: " + equippedItemToUpdate.getSlotType().getName() +
+                    ", Item Name: " + equippedItemToUpdate.getItem().getItemName() +
+                    ", Item ID: " + equippedItemToUpdate.getItem().getItemID());
+
+                // 2. Create a new Item to update the EquippedItem with
+                Item newItem = new Item("Updated Sword", 50, equippedItemToUpdate.getSlotType(), 2000, true, "Weapon");
+                Item createdNewItem = itemDao.create(newItem);
+
+                // 3. Update the EquippedItem with the new Item
+                equippedItemToUpdate.setItem(createdNewItem); // Set the new Item in the EquippedItem
+                EquippedItem updatedEquippedItem = EquippedItemDao.getInstance().updateItem(equippedItemToUpdate);
+
+                // 4. Print the updated EquippedItem
+                System.out.println("Equipped Item after update:");
+                System.out.println("Slot Type: " + updatedEquippedItem.getSlotType().getName() +
+                    ", Item Name: " + updatedEquippedItem.getItem().getItemName() +
+                    ", Item ID: " + updatedEquippedItem.getItem().getItemID());
+            } else {
+                System.out.println("No Equipped Items found for the character to test update.");
+            }
 
             // Delete
             System.out.println("============= Delete ================");
+            // Delete the head EquippedItem
+            EquippedItemDao.getInstance().delete(retrievedHeadEquippedItem);
+            System.out.println("Deleted EquippedItem for head:");
+            System.out.println("Character ID: " + retrievedHeadEquippedItem.getCharacter().getCharacterID());
+            System.out.println("Slot Type: " + retrievedHeadEquippedItem.getSlotType().getName());
+            System.out.println("Item ID: " + retrievedHeadEquippedItem.getItem().getItemID());
+            System.out.println("Item Name: " + retrievedHeadEquippedItem.getItem().getItemName());
+
             // Delete the CharacterJob
             characterJobDao.delete(createdCharacterJob.getCharacter().getCharacterID(),createdCharacterJob.getJob().getJobID());
             System.out.println("Deleted Character Job Pair = "+ createdCharacterJob.getCharacter().getCharacterFirstName() + createdCharacterJob.getJob().getJobName());
@@ -287,7 +409,7 @@ public class Driver {
             // Delete CharacterAttributeValues by CharacterID and AttributeID
             characterAttributeValuesDao.delete(newValue1);
             System.out.println("Deleted CharacterAttributeValues with CharacterID: " + newValue1.getCharacterID() +
-                               " and AttributeID: " + newValue1.getAttributeID());
+                " and AttributeID: " + newValue1.getAttributeID());
 
             // Delete the Player after character operations are completed
             playerDao.delete(createdPlayer);
@@ -325,7 +447,6 @@ public class Driver {
         }
     }
 
-} 
-
+}
 
 
