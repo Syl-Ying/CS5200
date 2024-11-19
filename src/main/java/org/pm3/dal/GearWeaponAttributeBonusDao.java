@@ -5,7 +5,7 @@ import java.sql.*;
 
 
 /**
- * DAO class for GearWeaponAttributeBonus
+ *  DAO class for GearWeaponAttributeBonus
  */
 public class GearWeaponAttributeBonusDao {
 	private static GearWeaponAttributeBonusDao instance = null;
