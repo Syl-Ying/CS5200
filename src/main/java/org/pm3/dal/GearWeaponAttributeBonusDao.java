@@ -27,7 +27,7 @@ public class GearWeaponAttributeBonusDao {
      * 	Create a GearWeaponAttributeBonus table
      */
     public GearWeaponAttributeBonus create(GearWeaponAttributeBonus bonus) throws SQLException {
-        String insertQuery = "INSERT INTO GearWeaponAttributeBonus(itemID, attributeID, bonusValue) "+ 
+        String insertQuery = "INSERT INTO GearWeaponAttributeBonus(itemID, attributeID, bonuesValue) "+
         					 "VALUES (?, ?, ?);";
         Connection connection = null;
         PreparedStatement insertStmt = null;
@@ -57,7 +57,7 @@ public class GearWeaponAttributeBonusDao {
      * 	Get GearWeaponAttributeBonus by itemID and attributeID (compound key)
      */
     public GearWeaponAttributeBonus getGWAByItemIdAndAttributeID(int itemID, int attributeID) throws SQLException {
-        String selectQuery = "SELECT itemID, attributeID, bonusValue " + 
+        String selectQuery = "SELECT itemID, attributeID, bonuesValue " +
         					 "FROM GearWeaponAttributeBonus " + 
         					 "WHERE itemID=? AND attributeID=?;";
         Connection connection = null;
@@ -74,7 +74,7 @@ public class GearWeaponAttributeBonusDao {
             if (results.next()) {
                 int resultItemID = results.getInt("itemID");
                 int resultAttributeID = results.getInt("attributeID");
-                int bonusValue = results.getInt("bonusValue");
+                int bonusValue = results.getInt("bonuesValue");
 
                 return new GearWeaponAttributeBonus(resultItemID, resultAttributeID, bonusValue);
             }
@@ -103,7 +103,7 @@ public class GearWeaponAttributeBonusDao {
     			GearWeaponAttributeBonus gwaBonus, 
     			int newBonusValue) throws SQLException {
         String updateQuery = "UPDATE GearWeaponAttributeBonus " + 
-        					 "SET bonusValue=? " + 
+        					 "SET bonuesValue=? " +
         		             "WHERE itemID=? AND attributeID=?;";
         Connection connection = null;
         PreparedStatement updateStmt = null;
