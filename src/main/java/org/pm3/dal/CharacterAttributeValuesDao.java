@@ -107,7 +107,7 @@ public class CharacterAttributeValuesDao {
      * 	Delete CharacterAttributeValues By characterID AND attributeID
      */
     public CharacterAttributeValues delete(CharacterAttributeValues values) throws SQLException {
-        String deleteQuery = "DELETE FROM CharacterAttributeValues" + 
+        String deleteQuery = "DELETE FROM CharacterAttributeValues " + 
                                 "WHERE characterID=? AND attributeID=?;";
         Connection connection = null;
         PreparedStatement deleteStmt = null;

@@ -27,7 +27,7 @@ public class GearWeaponAttributeBonusDao {
      * 	Create a GearWeaponAttributeBonus table
      */
     public GearWeaponAttributeBonus create(GearWeaponAttributeBonus bonus) throws SQLException {
-        String insertQuery = "INSERT INTO GearWeaponAttributeBonus(itemID, attributeID, bonuesValue) "+ 
+        String insertQuery = "INSERT INTO GearWeaponAttributeBonus(itemID, attributeID, bonusValue) "+ 
         					 "VALUES (?, ?, ?);";
         Connection connection = null;
         PreparedStatement insertStmt = null;
@@ -102,8 +102,8 @@ public class GearWeaponAttributeBonusDao {
     public GearWeaponAttributeBonus update(
     			GearWeaponAttributeBonus gwaBonus, 
     			int newBonusValue) throws SQLException {
-        String updateQuery = "UPDATE GearWeaponAttributeBonus" + 
-        					 "SET bonusValue=?" + 
+        String updateQuery = "UPDATE GearWeaponAttributeBonus " + 
+        					 "SET bonusValue=? " + 
         		             "WHERE itemID=? AND attributeID=?;";
         Connection connection = null;
         PreparedStatement updateStmt = null;
