@@ -137,21 +137,28 @@ public class Driver {
                 System.out.println(currency.getCurrencyName());
             }
         
-	     	// Test CharacterAttributeDao
+	     	// CharacterAttribute
+            // Create CharacterAttribute
 	        CharacterAttribute newAttribute = new CharacterAttribute("Strength");
 	        CharacterAttribute createdAttribute = characterAttributeDao.create(newAttribute);
 	        System.out.println("Created CharacterAttribute: " + createdAttribute.getAttributeName());
-	
+            // Retrieve CharacterAttribute by AttributeID
 	        CharacterAttribute retrievedAttribute = characterAttributeDao.getByAttributeId(createdAttribute.getAttributeID());
 	        System.out.println("Retrieved CharacterAttribute: " + retrievedAttribute.getAttributeName());
 	
-	        // Test CharacterAttributeValuesDao
-	        CharacterAttributeValues newValue = new CharacterAttributeValues(1, createdAttribute.getAttributeID(), 100);
-	        newValue = characterAttributeValuesDao.create(newValue);
-	        System.out.println("Created CharacterAttributeValues: " + newValue.getAttributeValue());
-	
-	        CharacterAttributeValues retrievedValue = characterAttributeValuesDao.getByCharAttrById(newValue.getCharacterID(), newValue.getAttributeID());
+	        // CharacterAttributeValues
+            // Create CharacterAttribute
+	        CharacterAttributeValues newValue1 = new CharacterAttributeValues(1, createdAttribute.getAttributeID(), 100);
+	        newValue1 = characterAttributeValuesDao.create(newValue1);
+	        System.out.println("Created CharacterAttributeValues01: " + newValue.getAttributeValue());
+            CharacterAttributeValues newValue2 = new CharacterAttributeValues(1, createdAttribute.getAttributeID(), 200);
+	        newValue2 = characterAttributeValuesDao.create(newValue2);
+	        System.out.println("Created CharacterAttributeValues02: " + newValue.getAttributeValue());
+            // Retrieve CharacterAttributeValues by CharacterID and AttributeID
+	        CharacterAttributeValues retrievedValue = characterAttributeValuesDao.getByCharAttrById(newValue.getCharacterID(), 
+                                                                                                    newValue.getAttributeID());
 	        System.out.println("Retrieved CharacterAttributeValues: " + retrievedValue.getAttributeValue());
+
 
             //Create Slottype
             SlotType newSlotTypeforItem = new SlotType(1, "Waist");
@@ -187,6 +194,32 @@ public class Driver {
             //get consumable by id
             System.out.println(ConsumableDao.getInstance().getConsumableById(20));
 
+            // GearWeaponAttributeBonus
+            // Create a new GearWeaponAttributeBonus
+            GearWeaponAttributeBonus newBonus = new GearWeaponAttributeBonus(1, 2, 50);
+            newBonus = gearWeaponAttributeBonusDao.create(newBonus);
+            System.out.println("Created GearWeaponAttributeBonus: Bonus Value " + newBonus.getBonusValue());
+            // Retrieve the GearWeaponAttributeBonus by itemID and attributeID
+            GearWeaponAttributeBonus retrievedBonus = gearWeaponAttributeBonusDao.getGWAByItemIdAndAttributeID(newBonus.getItemID(), newBonus.getAttributeID());
+            System.out.println("Retrieved GearWeaponAttributeBonus: Bonus Value " + retrievedBonus.getBonusValue());
+            // Update the bonus value of GearWeaponAttributeBonus
+            GearWeaponAttributeBonus updatedBonus = gearWeaponAttributeBonusDao.update(retrievedBonus, 999); 
+            System.out.println("Updated GearWeaponAttributeBonus: Bonus Value " + updatedBonus.getBonusValue());
+
+            // need to insert Consumable before excute operations below
+
+            // ConsumableAttributeBonus
+            // Create a new ConsumableAttributeBonus
+            ConsumableAttributeBonus newBonus = new ConsumableAttributeBonus(1, 1, 15.5, 670); 
+            newBonus = consumableAttributeBonusDao.create(newBonus);
+            System.out.println("Created ConsumableAttributeBonus: Bonus Percentage " + newBonus.getBonusPercentage());
+            // Retrieve the ConsumableAttributeBonus by bonusID
+            ConsumableAttributeBonus retrievedBonus = consumableAttributeBonusDao.getConsuAttriByBonusId(newBonus.getBonusID());
+            System.out.println("Retrieved ConsumableAttributeBonus: Bonus Percentage " + retrievedBonus.getBonusPercentage());
+            // Update the bonus value of ConsumableAttributeBonus
+            ConsumableAttributeBonus updatedBonus = consumableAttributeBonusDao.update(retrievedBonus, 19.9, 199); 
+            System.out.println("Updated ConsumableAttributeBonus: Bonus Percentage " + updatedBonus.getBonusPercentage() +
+                               ", Bonus Cap " + updatedBonus.getBonusCap());
 
             // Create a new Inventory
             Inventory inventory1 = new Inventory(character2, newItem1, 10, 1);
@@ -243,6 +276,15 @@ public class Driver {
             // Delete the CharacterJob
             characterJobDao.delete(createdCharacterJob.getCharacter().getCharacterID(),createdCharacterJob.getJob().getJobID());
             System.out.println("Deleted Character Job Pair = "+ createdCharacterJob.getCharacter().getCharacterFirstName() + createdCharacterJob.getJob().getJobName());
+
+            // Delete CharacterAttribute by AttributeID
+            characterAttributeDao.delete(createdAttribute);
+            System.out.println("Deleted CharacterAttribute with ID: " + createdAttribute.getAttributeID());
+
+            // Delete CharacterAttributeValues by CharacterID and AttributeID
+            characterAttributeValuesDao.delete(newValue);
+            System.out.println("Deleted CharacterAttributeValues with CharacterID: " + newValue.getCharacterID() +
+                               " and AttributeID: " + newValue.getAttributeID());
 
             // Delete the Player after character operations are completed
             playerDao.delete(createdPlayer);
