@@ -206,8 +206,6 @@ public class Driver {
             GearWeaponAttributeBonus updatedBonus = gearWeaponAttributeBonusDao.update(retrievedBonus, 999); 
             System.out.println("Updated GearWeaponAttributeBonus: Bonus Value " + updatedBonus.getBonusValue());
 
-            // need to insert Consumable before excute operations below
-
             // ConsumableAttributeBonus
             // Create a new ConsumableAttributeBonus
             ConsumableAttributeBonus newBonus = new ConsumableAttributeBonus(1, 1, 15.5, 670); 
