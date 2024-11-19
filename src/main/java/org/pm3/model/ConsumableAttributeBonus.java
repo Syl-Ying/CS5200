@@ -22,6 +22,7 @@ public class ConsumableAttributeBonus {
         this.bonusCap = bonusCap;
     }
 	
+	// Getters and Setters
 	public int getBonusID() {
         return bonusID;
     }
@@ -61,8 +62,5 @@ public class ConsumableAttributeBonus {
 	public void setBonusCap(int bonusCap) {
 		this.bonusCap = bonusCap;
 	}
-	
-	
-	
 
 }
