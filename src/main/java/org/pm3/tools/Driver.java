@@ -1,24 +1,28 @@
 package org.pm3.tools;
 
+import org.pm3.dal.*;
+import org.pm3.model.*;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.pm3.dal.*;
-import org.pm3.model.*;
-
 public class Driver {
+
     public static void main(String[] args) throws SQLException {
         // Initialize the PlayerDao and CharactersDao to perform database operations
         PlayerDao playerDao = PlayerDao.getInstance();
         CharactersDao charactersDao = CharactersDao.getInstance();
         JobDao jobDao = JobDao.getInstance();
         CharacterJobDao characterJobDao = CharacterJobDao.getInstance();
-
         SlotTypeDao slotTypeDao = SlotTypeDao.getInstance();
         CurrencyDao currencyDao = CurrencyDao.getInstance();
         CharacterCurrencyDao characterCurrencyDao = CharacterCurrencyDao.getInstance();
+        CharacterAttributeDao characterAttributeDao = CharacterAttributeDao.getInstance();
+        CharacterAttributeValuesDao characterAttributeValuesDao = CharacterAttributeValuesDao.getInstance();
+        GearWeaponAttributeBonusDao gearWeaponAttributeBonusDao = GearWeaponAttributeBonusDao.getInstance();
+        ConsumableAttributeBonusDao consumableAttributeBonusDao = ConsumableAttributeBonusDao.getInstance();
+
         try {
-            // 1. Create a new Player
+        	// 1. Create a new Player
             Player newPlayer = new Player("john_doe", "john.doe@example.com");
             Player createdPlayer = playerDao.create(newPlayer);
             System.out.println("Created Player: " + createdPlayer.getPlayerID());
@@ -77,7 +81,8 @@ public class Driver {
                 System.out.println(" JobName = " + characterJob.getJob().getJobName() +
                                    ", Level = " + characterJob.getCharacterJobLevel());
             }
-         //  11: Delete the CharacterJob
+            
+            // 11: Delete the CharacterJob
             characterJobDao.delete(createdCharacterJob.getCharacter().getCharacterID(),createdCharacterJob.getJob().getJobID());
             System.out.println("Deleted Character Job Pair = "+ createdCharacterJob.getCharacter().getCharacterFirstName() + createdCharacterJob.getJob().getJobName());
 
@@ -85,12 +90,9 @@ public class Driver {
             playerDao.delete(createdPlayer);
             System.out.println("Deleted Player with ID: " + createdPlayer.getPlayerID());
             
-            
             // 13. Delete the Job (optional)
-             jobDao.delete(updatedJob);
-             System.out.println("Deleted Job with ID: " + updatedJob.getJobID());
-
-
+            jobDao.delete(updatedJob);
+            System.out.println("Deleted Job with ID: " + updatedJob.getJobID());
 
             // 1. Create a new SlotType
             SlotType newSlotType = new SlotType(0, "Helmet");
@@ -145,10 +147,25 @@ public class Driver {
             // 5. Delete Currency
             currencyDao.delete(updatedCurrency.getCurrencyID());
             System.out.println("Deleted Currency with ID: " + updatedCurrency.getCurrencyID());
-        } catch (SQLException e) {
+        
+	     	// Test CharacterAttributeDao
+	        CharacterAttribute newAttribute = new CharacterAttribute("Strength");
+	        CharacterAttribute createdAttribute = characterAttributeDao.create(newAttribute);
+	        System.out.println("Created CharacterAttribute: " + createdAttribute.getAttributeName());
+	
+	        CharacterAttribute retrievedAttribute = characterAttributeDao.getByAttributeId(createdAttribute.getAttributeID());
+	        System.out.println("Retrieved CharacterAttribute: " + retrievedAttribute.getAttributeName());
+	
+	        // Test CharacterAttributeValuesDao
+	        CharacterAttributeValues newValue = new CharacterAttributeValues(1, createdAttribute.getAttributeID(), 100);
+	        newValue = characterAttributeValuesDao.create(newValue);
+	        System.out.println("Created CharacterAttributeValues: " + newValue.getAttributeValue());
+	
+	        CharacterAttributeValues retrievedValue = characterAttributeValuesDao.getByCharAttrById(newValue.getCharacterID(), newValue.getAttributeID());
+	        System.out.println("Retrieved CharacterAttributeValues: " + retrievedValue.getAttributeValue());
+		} catch (SQLException e) {
             e.printStackTrace();
         }
-
         //Create Slottype
         SlotType newSlotTypeforItem = new SlotType(1, "Waist");
         SlotType createdSlotType = slotTypeDao.create(newSlotTypeforItem);
@@ -180,6 +197,8 @@ public class Driver {
         //get consumable by id
         System.out.println(ConsumableDao.getInstance().getConsumableById(20));
     }
-}
+
+} 
+
 
 
