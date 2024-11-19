@@ -8,14 +8,11 @@ import java.util.List;
 public class Driver {
 
     public static void main(String[] args) throws SQLException {
-        // Initialize DAOs to perform database operations
+        // Initialize the PlayerDao and CharactersDao to perform database operations
         PlayerDao playerDao = PlayerDao.getInstance();
         CharactersDao charactersDao = CharactersDao.getInstance();
         JobDao jobDao = JobDao.getInstance();
         CharacterJobDao characterJobDao = CharacterJobDao.getInstance();
-        InventoryDao inventoryDao = InventoryDao.getInstance();
-        WeaponAllowedJobsDao weaponAllowedJobsDao = WeaponAllowedJobsDao.getInstance();
-        GearAllowedJobsDao gearAllowedJobsDao = GearAllowedJobsDao.getInstance();
         SlotTypeDao slotTypeDao = SlotTypeDao.getInstance();
         CurrencyDao currencyDao = CurrencyDao.getInstance();
         CharacterCurrencyDao characterCurrencyDao = CharacterCurrencyDao.getInstance();
@@ -28,15 +25,11 @@ public class Driver {
         	// 1. Create a new Player
             Player newPlayer = new Player("john_doe", "john.doe@example.com");
             Player createdPlayer = playerDao.create(newPlayer);
-            Player player2 = new Player("jane_doe", "janedoe@gmail.com");
-            player2 = playerDao.create(player2);
             System.out.println("Created Player: " + createdPlayer.getPlayerID());
 
             // 2. Create a new Character for the created Player
             Characters newCharacter = new Characters(createdPlayer, "John", "Doe", 100);
             Characters createdCharacter = charactersDao.create(newCharacter);
-            Characters character2 = new Characters(player2, "Jane", "Doe", 200);
-            character2 = charactersDao.create(character2);
             System.out.println("Created Character: " + createdCharacter.getCharacterID());
 
             // 3. Retrieve the Character by ID
@@ -49,13 +42,13 @@ public class Driver {
             createdCharacter.setCurrentMaxHP(120);
             Characters updatedCharacter = charactersDao.update(createdCharacter);
             System.out.println("Updated Character: " + updatedCharacter.getCharacterID()+" FName: "+updatedCharacter.getCharacterFirstName());
+
+
             
             // 5. Create a new Job
             Job newJob = new Job("Software EngineerII");
             Job createdJob = jobDao.create(newJob);
             System.out.println("Created Job: " + createdJob.getJobID() + ", " + createdJob.getJobName());
-            Job job2 = new Job("Software EngineerI");
-            job2 = jobDao.create(job2);
             
             // 6. Retrieve a Job by ID
             Job retrievedJob = jobDao.getJobById(createdJob.getJobID());
@@ -88,15 +81,26 @@ public class Driver {
                 System.out.println(" JobName = " + characterJob.getJob().getJobName() +
                                    ", Level = " + characterJob.getCharacterJobLevel());
             }
+            
+            // 11: Delete the CharacterJob
+            characterJobDao.delete(createdCharacterJob.getCharacter().getCharacterID(),createdCharacterJob.getJob().getJobID());
+            System.out.println("Deleted Character Job Pair = "+ createdCharacterJob.getCharacter().getCharacterFirstName() + createdCharacterJob.getJob().getJobName());
 
+            // 12. Delete the Player after character operations are completed
+            playerDao.delete(createdPlayer);
+            System.out.println("Deleted Player with ID: " + createdPlayer.getPlayerID());
+            
+            // 13. Delete the Job (optional)
+            jobDao.delete(updatedJob);
+            System.out.println("Deleted Job with ID: " + updatedJob.getJobID());
 
             // 1. Create a new SlotType
             SlotType newSlotType = new SlotType(0, "Helmet");
-            SlotType slotType1 = slotTypeDao.create(newSlotType);
-            System.out.println("Created SlotType: ID = " + slotType1.getSlotID() + ", Name = " + slotType1.getName());
+            SlotType createdSlotType = slotTypeDao.create(newSlotType);
+            System.out.println("Created SlotType: ID = " + createdSlotType.getSlotID() + ", Name = " + createdSlotType.getName());
 
             // 2. Retrieve the SlotType by ID
-            SlotType retrievedSlotType = slotTypeDao.getByID(slotType1.getSlotID());
+            SlotType retrievedSlotType = slotTypeDao.getByID(createdSlotType.getSlotID());
             if (retrievedSlotType != null) {
                 System.out.println("Retrieved SlotType: ID = " + retrievedSlotType.getSlotID() + ", Name = " + retrievedSlotType.getName());
             } else {
@@ -115,6 +119,9 @@ public class Driver {
                 System.out.println("ID = " + slotType.getSlotID() + ", Name = " + slotType.getName());
             }
 
+            // 5. Delete the SlotType
+            slotTypeDao.delete(updatedSlotType.getSlotID());
+            System.out.println("Deleted SlotType with ID: " + updatedSlotType.getSlotID());
 
             // 1. Create Currency
             Currency newCurrency = new Currency(0, "Gold", 1000.0, 500.0);
@@ -136,207 +143,59 @@ public class Driver {
             for (Currency currency : allCurrencies) {
                 System.out.println(currency.getCurrencyName());
             }
+
+            // 5. Delete Currency
+            currencyDao.delete(updatedCurrency.getCurrencyID());
+            System.out.println("Deleted Currency with ID: " + updatedCurrency.getCurrencyID());
         
-	     	// CharacterAttribute
-            // Create CharacterAttribute
+	     	// Test CharacterAttributeDao
 	        CharacterAttribute newAttribute = new CharacterAttribute("Strength");
 	        CharacterAttribute createdAttribute = characterAttributeDao.create(newAttribute);
 	        System.out.println("Created CharacterAttribute: " + createdAttribute.getAttributeName());
-            // Retrieve CharacterAttribute by AttributeID
+	
 	        CharacterAttribute retrievedAttribute = characterAttributeDao.getByAttributeId(createdAttribute.getAttributeID());
 	        System.out.println("Retrieved CharacterAttribute: " + retrievedAttribute.getAttributeName());
 	
-	        // CharacterAttributeValues
-            // Create CharacterAttribute
-	        CharacterAttributeValues newValue1 = new CharacterAttributeValues(1, createdAttribute.getAttributeID(), 100);
-	        newValue1 = characterAttributeValuesDao.create(newValue1);
-	        System.out.println("Created CharacterAttributeValues01: " + newValue1.getAttributeValue());
-            CharacterAttributeValues newValue2 = new CharacterAttributeValues(2, createdAttribute.getAttributeID(), 200);
-	        newValue2 = characterAttributeValuesDao.create(newValue2);
-	        System.out.println("Created CharacterAttributeValues02: " + newValue2.getAttributeValue());
-            // Retrieve CharacterAttributeValues by CharacterID and AttributeID
-	        CharacterAttributeValues retrievedValue = characterAttributeValuesDao.getByCharAttrById(newValue1.getCharacterID(), 
-                                                                                                    newValue1.getAttributeID());
-	        System.out.println("Retrieved CharacterAttributeValues01: " + retrievedValue.getAttributeValue());
-
-
-            //Create Slottype
-            SlotType newSlotTypeforItem = new SlotType(1, "Waist");
-            SlotType slotType2 = slotTypeDao.create(newSlotTypeforItem);
-
-            //Create Items
-            Item item1 = new Item("weapon1",50,newSlotTypeforItem,5000,true,"weapon");
-            Item item2 = new Item("weapon2",50,newSlotTypeforItem,5000,false,"weapon");
-            Item newItem1 = ItemDao.getInstance().create(item1);
-            Item newItem2 = ItemDao.getInstance().create(item2);
-            System.out.print("the new item id is: " + newItem1.getItemID()+". the new item name is: " +newItem1.getItemName() + ". new item max size is " + newItem1.getItemMaxStackSize()+". new item slottype is: " + newItem1.getSlotType().getSlotID() + ". vendor price is: " + newItem1.getItemVendorPrice() + " whether or not it is able to sell: " + newItem1.isAbleToSell()+" .item catrgory is: " + newItem1.getItemCategory());
-            Item returnItem1 = ItemDao.getInstance().getItembyId(item1.getItemID());
-            System.out.println();
-            System.out.print("the return item id is: " + returnItem1.getItemID()+". the new return item name is: " +returnItem1.getItemName() + ". new item max size is " + returnItem1.getItemMaxStackSize()+". new returnItem1 slottype is: " + returnItem1.getSlotType().getSlotID() + ". vendor price is: " + returnItem1.getItemVendorPrice() + " whether or not it is able to sell: " + returnItem1.isAbleToSell()+" .item catrgory is: " + returnItem1.getItemCategory() +"\n");
-            Weapon weapon1 = new Weapon("weapon3",30,slotType2,50,true,"weapon",5,10,2,3,4);
-            Weapon weaponReturn = WeaponDao.getInstance().create(weapon1);
-            Weapon weapon2 = new Weapon("weapon4",20,slotType2,500,false,"weapon",7,11,4,5,7);
-            weapon2 = WeaponDao.getInstance().create(weapon2);
-    //        System.out.print("the return weapon id is: " + weaponReturn.getItemID()+". the new return weapon name is: " +weaponReturn.getItemName() + ". new weapon max size is " + weaponReturn.getItemMaxStackSize()+". new weapon slottype is: " + weaponReturn.getSlotType().getSlotID() + ". vendor price is: " + weaponReturn.getItemVendorPrice() + " whether or not it is able to sell: " + weaponReturn.isAbleToSell()+" .item catrgory is: " + weaponReturn.getItemCategory());
-    //        System.out.println("The weapon itemLel is" + weaponReturn.getWeaponItemLevel()+"the weapon required level is" + weaponReturn.getWeaponRequiredLevel() + "the weapon damage done is " + weaponReturn.getWeaponDamageDone() +"the weapon auto attack is" + weaponReturn.getWeaponAutoAttack()+"weapon " );
-            System.out.println(weaponReturn.toString());
-            Weapon weaponbyId = WeaponDao.getInstance().getItembyId(18);
-            System.out.println(weaponbyId);
-
-            Gear gear1 = new Gear("gear1",30,slotType2,60,false,"gear",10,2,3,4);
-            //create a new gear
-            System.out.println(GearDao.getInstance().create(gear1));
-            //test get gear by gear id
-            System.out.println(GearDao.getInstance().getGearById(19));
-            Consumable consumable1 = new Consumable("consumable1",30, slotType2,60,false,"Consumable",2,10);
-            //create a new consumables
-            System.out.println(ConsumableDao.getInstance().create(consumable1));
-            //get consumable by id
-            System.out.println(ConsumableDao.getInstance().getConsumableById(20));
-
-            // GearWeaponAttributeBonus
-            // Create a new GearWeaponAttributeBonus
-            GearWeaponAttributeBonus newBonus1 = new GearWeaponAttributeBonus(1, 2, 50);
-            newBonus1 = gearWeaponAttributeBonusDao.create(newBonus1);
-            GearWeaponAttributeBonus newBonus2 = new GearWeaponAttributeBonus(2, 1, 60);
-            newBonus2 = gearWeaponAttributeBonusDao.create(newBonus2);
-            System.out.println("Created GearWeaponAttributeBonus: Bonus Value " + newBonus1.getBonusValue());
-            // Retrieve the GearWeaponAttributeBonus by itemID and attributeID
-            GearWeaponAttributeBonus retrievedBonus = gearWeaponAttributeBonusDao.getGWAByItemIdAndAttributeID(newBonus.getItemID(), newBonus.getAttributeID());
-            System.out.println("Retrieved GearWeaponAttributeBonus: Bonus Value " + retrievedBonus.getBonusValue());
-            // Update the bonus value of GearWeaponAttributeBonus
-            GearWeaponAttributeBonus updatedBonus = gearWeaponAttributeBonusDao.update(retrievedBonus, 999); 
-            System.out.println("Updated GearWeaponAttributeBonus: Bonus Value " + updatedBonus.getBonusValue());
-
-            // GearWeaponAttributeBonus
-            // Create a new GearWeaponAttributeBonus
-            GearWeaponAttributeBonus newBonus1 = new GearWeaponAttributeBonus(1, 2, 50);
-            newBonus1 = gearWeaponAttributeBonusDao.create(newBonus1);
-            GearWeaponAttributeBonus newBonus2 = new GearWeaponAttributeBonus(2, 1, 60);
-            newBonus2 = gearWeaponAttributeBonusDao.create(newBonus2);
-            System.out.println("Created GearWeaponAttributeBonus: Bonus Value " + newBonus1.getBonusValue());
-            // Retrieve the GearWeaponAttributeBonus by itemID and attributeID
-            GearWeaponAttributeBonus retrievedBonus = gearWeaponAttributeBonusDao.getGWAByItemIdAndAttributeID(newBonus1.getItemID(), newBonus1.getAttributeID());
-            System.out.println("Retrieved GearWeaponAttributeBonus: Bonus Value " + retrievedBonus.getBonusValue());
-            // Update the bonus value of GearWeaponAttributeBonus
-            GearWeaponAttributeBonus updatedBonus = gearWeaponAttributeBonusDao.update(retrievedBonus, 999); 
-            System.out.println("Updated GearWeaponAttributeBonus: Bonus Value " + updatedBonus.getBonusValue());
-
-            // ConsumableAttributeBonus
-            // Create a new ConsumableAttributeBonus
-            ConsumableAttributeBonus newBonus = new ConsumableAttributeBonus(6, 1, 15.5, 670); 
-            newBonus = consumableAttributeBonusDao.create(newBonus);
-            System.out.println("Created ConsumableAttributeBonus: Bonus Percentage " + newBonus.getBonusPercentage() +
-         		   			   ", Bonus Cap " + newBonus.getBonusCap() );
-            // Retrieve the ConsumableAttributeBonus by bonusID
-            ConsumableAttributeBonus retrievedConsumableAttributeBonus = consumableAttributeBonusDao.getConsuAttriByBonusId(newBonus.getBonusID());
-            System.out.println("Retrieved ConsumableAttributeBonus: Bonus Percentage " + retrievedConsumableAttributeBonus.getBonusPercentage() +
-                    		   ", Bonus Cap " + retrievedConsumableAttributeBonus.getBonusCap());
-            // Update the bonus value of ConsumableAttributeBonus
-            ConsumableAttributeBonus updatedConsumableAttributeBonus = consumableAttributeBonusDao.update(retrievedConsumableAttributeBonus, 19.9, 199); 
-            System.out.println("Updated ConsumableAttributeBonus: Bonus Percentage " + updatedConsumableAttributeBonus.getBonusPercentage() +
-                               ", Bonus Cap " + updatedConsumableAttributeBonus.getBonusCap());
-
-            // Create a new Inventory
-            Inventory inventory1 = new Inventory(character2, newItem1, 10, 1);
-            inventory1 = inventoryDao.create(inventory1);
-            Inventory inventory2 = new Inventory(character2, newItem2, 20, 2);
-            inventory2 = inventoryDao.create(inventory2);
-
-            // Read the Inventory by ID
-            Inventory retrievedInventory = inventoryDao.getInventoryByCharacterAndItem(character2, newItem1);
-            System.out.format("Reading Inventory: [itemID=%d, characterID=%d, inventorySlotNumber=%d, currentItemQuantity=%d]\n",
-                    retrievedInventory.getItem().getItemID(), retrievedInventory.getCharacter().getCharacterID(),
-                    retrievedInventory.getInventorySlotNumber(), retrievedInventory.getCurrentItemQuantity());
-
-            // Update the Inventory
-            Inventory updatedInventory = inventoryDao.updateInventory(inventory1, 2);
-            System.out.format("Updated Inventory: [itemID=%d, characterID=%d, inventorySlotNumber=%d, currentItemQuantity=%d]\n",
-                    updatedInventory.getItem().getItemID(), updatedInventory.getCharacter().getCharacterID(),
-                    updatedInventory.getInventorySlotNumber(), updatedInventory.getCurrentItemQuantity());
-
-            // Retrieve all Inventories for the created Character
-            List<Inventory> allInventories = inventoryDao.getInventoryByCharacter(createdCharacter);
-            for (Inventory inventory : allInventories) {
-                System.out.format("Looping inventory: [itemID=%d, characterID=%d, inventorySlotNumber=%d, currentItemQuantity=%d]\n",
-                        inventory.getItem().getItemID(), inventory.getCharacter().getCharacterID(),
-                        inventory.getInventorySlotNumber(), inventory.getCurrentItemQuantity());
-            }
-
-
-            // Create a new WeaponAllowedJobs
-            WeaponAllowedJobs weaponAllowedJobs1 = new WeaponAllowedJobs(weaponReturn, createdJob, true);
-            weaponAllowedJobs1 = weaponAllowedJobsDao.create(weaponAllowedJobs1);
-            WeaponAllowedJobs weaponAllowedJobs2 = new WeaponAllowedJobs(weaponReturn, job2, true);
-            weaponAllowedJobs2 = weaponAllowedJobsDao.create(weaponAllowedJobs2);
-
-            // Read the WeaponAllowedJobs by WeaponID and JobID
-            WeaponAllowedJobs retrievedWeaponAllowedJobs = weaponAllowedJobsDao.getWeaponAllowedJobsByWeaponIDAndJobID(weaponReturn.getItemID(), createdJob.getJobID());
-            System.out.format("Reading WeaponAllowedJobs: [weaponID=%d, jobID=%d, isAvaibility=%b]\n",
-                    retrievedWeaponAllowedJobs.getWeapon().getItemID(), retrievedWeaponAllowedJobs.getJob().getJobID(),
-                    retrievedWeaponAllowedJobs.isAvailability());
-
-
-
-            // Create a new GearAllowedJobs
-            GearAllowedJobs gearAllowedJobs = new GearAllowedJobs(gear1, createdJob, true);
-            gearAllowedJobs = gearAllowedJobsDao.create(gearAllowedJobs);
-
-            // Read the GearAllowedJobs by GearID and JobID
-            GearAllowedJobs retrievedGearAllowedJobs = gearAllowedJobsDao.getGearAllowedJobsByGearIDAndJobID(gear1.getItemID(), createdJob.getJobID());
-            System.out.format("Reading GearAllowedJobs: [gearID=%d, jobID=%d, isAvaibility=%b]\n",
-                    retrievedGearAllowedJobs.getGear().getItemID(), retrievedGearAllowedJobs.getJob().getJobID(),
-                    retrievedGearAllowedJobs.isAvaibility());
-
-            // Delete
-            System.out.println("============= Delete ================");
-            // Delete the CharacterJob
-            characterJobDao.delete(createdCharacterJob.getCharacter().getCharacterID(),createdCharacterJob.getJob().getJobID());
-            System.out.println("Deleted Character Job Pair = "+ createdCharacterJob.getCharacter().getCharacterFirstName() + createdCharacterJob.getJob().getJobName());
-
-            // Delete CharacterAttribute by AttributeID
-            characterAttributeDao.delete(createdAttribute);
-            System.out.println("Deleted CharacterAttribute with ID: " + createdAttribute.getAttributeID());
-
-            // Delete CharacterAttributeValues by CharacterID and AttributeID
-            characterAttributeValuesDao.delete(newValue1);
-            System.out.println("Deleted CharacterAttributeValues with CharacterID: " + newValue1.getCharacterID() +
-                               " and AttributeID: " + newValue1.getAttributeID());
-
-            // Delete the Player after character operations are completed
-            playerDao.delete(createdPlayer);
-            System.out.println("Deleted Player with ID: " + createdPlayer.getPlayerID());
-
-            // Delete the Job (optional)
-            jobDao.delete(updatedJob);
-            System.out.println("Deleted Job with ID: " + updatedJob.getJobID());
-
-            // Delete the SlotType
-            slotTypeDao.delete(updatedSlotType.getSlotID());
-            System.out.println("Deleted SlotType with ID: " + updatedSlotType.getSlotID());
-
-            // Delete Currency
-            currencyDao.delete(updatedCurrency.getCurrencyID());
-            System.out.println("Deleted Currency with ID: " + updatedCurrency.getCurrencyID());
-
-            // delete the WeaponAllowedJobs
-            weaponAllowedJobsDao.delete(weaponAllowedJobs1);
-            if (weaponAllowedJobsDao.getWeaponAllowedJobsByWeaponIDAndJobID(weapon2.getItemID(), createdJob.getJobID()) == null) {
-                System.out.println("Deleted WeaponAllowedJobs: [weaponID=" + weapon2.getItemID() + ", jobID=" + createdJob.getJobID() + "]");
-            } else {
-                System.out.println("Failed to delete WeaponAllowedJobs: [weaponID=" + weapon2.getItemID() + ", jobID=" + createdJob.getJobID() + "]");
-            }
-
-            // delete the GearAllowedJobs
-            gearAllowedJobsDao.delete(gearAllowedJobs);
-            if (gearAllowedJobsDao.getGearAllowedJobsByGearIDAndJobID(gear1.getItemID(), createdJob.getJobID()) == null) {
-                System.out.println("Deleted GearAllowedJobs: [gearID=" + gear1.getItemID() + ", jobID=" + createdJob.getJobID() + "]");
-            } else {
-                System.out.println("Failed to delete GearAllowedJobs: [gearID=" + gear1.getItemID() + ", jobID=" + createdJob.getJobID() + "]");
-            }
-        } catch (SQLException e) {
+	        // Test CharacterAttributeValuesDao
+	        CharacterAttributeValues newValue = new CharacterAttributeValues(1, createdAttribute.getAttributeID(), 100);
+	        newValue = characterAttributeValuesDao.create(newValue);
+	        System.out.println("Created CharacterAttributeValues: " + newValue.getAttributeValue());
+	
+	        CharacterAttributeValues retrievedValue = characterAttributeValuesDao.getByCharAttrById(newValue.getCharacterID(), newValue.getAttributeID());
+	        System.out.println("Retrieved CharacterAttributeValues: " + retrievedValue.getAttributeValue());
+		} catch (SQLException e) {
             e.printStackTrace();
         }
+        //Create Slottype
+        SlotType newSlotTypeforItem = new SlotType(1, "Waist");
+        SlotType createdSlotType = slotTypeDao.create(newSlotTypeforItem);
+        //Create Items
+        Item item1 = new Item("weapon1",50,newSlotTypeforItem,5000,true,"weapon");
+        Item item2 = new Item("weapon2",50,newSlotTypeforItem,5000,false,"weapon");
+        Item newItem1 = ItemDao.getInstance().create(item1);
+        Item newItem2 = ItemDao.getInstance().create(item2);
+        System.out.print("the new item id is: " + newItem1.getItemID()+". the new item name is: " +newItem1.getItemName() + ". new item max size is " + newItem1.getItemMaxStackSize()+". new item slottype is: " + newItem1.getSlotType().getSlotID() + ". vendor price is: " + newItem1.getItemVendorPrice() + " whether or not it is able to sell: " + newItem1.isAbleToSell()+" .item catrgory is: " + newItem1.getItemCategory());
+        Item returnItem1 = ItemDao.getInstance().getItembyId(item1.getItemID());
+        System.out.println();
+        System.out.print("the return item id is: " + returnItem1.getItemID()+". the new return item name is: " +returnItem1.getItemName() + ". new item max size is " + returnItem1.getItemMaxStackSize()+". new returnItem1 slottype is: " + returnItem1.getSlotType().getSlotID() + ". vendor price is: " + returnItem1.getItemVendorPrice() + " whether or not it is able to sell: " + returnItem1.isAbleToSell()+" .item catrgory is: " + returnItem1.getItemCategory() +"\n");
+        Weapon weapon1 = new Weapon("weapon3",30,createdSlotType,50,true,"weapon",5,10,2,3,4);
+        Weapon weaponReturn = WeaponDao.getInstance().create(weapon1);
+//        System.out.print("the return weapon id is: " + weaponReturn.getItemID()+". the new return weapon name is: " +weaponReturn.getItemName() + ". new weapon max size is " + weaponReturn.getItemMaxStackSize()+". new weapon slottype is: " + weaponReturn.getSlotType().getSlotID() + ". vendor price is: " + weaponReturn.getItemVendorPrice() + " whether or not it is able to sell: " + weaponReturn.isAbleToSell()+" .item catrgory is: " + weaponReturn.getItemCategory());
+//        System.out.println("The weapon itemLel is" + weaponReturn.getWeaponItemLevel()+"the weapon required level is" + weaponReturn.getWeaponRequiredLevel() + "the weapon damage done is " + weaponReturn.getWeaponDamageDone() +"the weapon auto attack is" + weaponReturn.getWeaponAutoAttack()+"weapon " );
+        System.out.println(weaponReturn.toString());
+        Weapon weaponbyId = WeaponDao.getInstance().getItembyId(18);
+        System.out.println(weaponbyId);
+
+        Gear gear1 = new Gear("gear1",30,createdSlotType,60,false,"gear",10,2,3,4);
+        //creaet a new gear
+        System.out.println(GearDao.getInstance().create(gear1));
+        //test get gear by gear id
+        System.out.println(GearDao.getInstance().getGearById(19));
+        Consumable consumable1 = new Consumable("consumable1",30, createdSlotType,60,false,"Consumable",2,10);
+        //create a new consumables
+        System.out.println(ConsumableDao.getInstance().create(consumable1));
+        //get consumable by id
+        System.out.println(ConsumableDao.getInstance().getConsumableById(20));
     }
 
 } 
