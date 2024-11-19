@@ -157,7 +157,7 @@ public class Driver {
             // Retrieve CharacterAttributeValues by CharacterID and AttributeID
 	        CharacterAttributeValues retrievedValue = characterAttributeValuesDao.getByCharAttrById(newValue1.getCharacterID(), 
                                                                                                     newValue1.getAttributeID());
-	        System.out.println("Retrieved CharacterAttributeValues: " + retrievedValue.getAttributeValue());
+	        System.out.println("Retrieved CharacterAttributeValues01: " + retrievedValue.getAttributeValue());
 
 
             //Create Slottype
@@ -226,10 +226,12 @@ public class Driver {
             // Create a new ConsumableAttributeBonus
             ConsumableAttributeBonus newBonus = new ConsumableAttributeBonus(6, 1, 15.5, 670); 
             newBonus = consumableAttributeBonusDao.create(newBonus);
-            System.out.println("Created ConsumableAttributeBonus: Bonus Percentage " + newBonus.getBonusPercentage());
+            System.out.println("Created ConsumableAttributeBonus: Bonus Percentage " + newBonus.getBonusPercentage() +
+         		   			   ", Bonus Cap " + newBonus.getBonusCap() );
             // Retrieve the ConsumableAttributeBonus by bonusID
             ConsumableAttributeBonus retrievedConsumableAttributeBonus = consumableAttributeBonusDao.getConsuAttriByBonusId(newBonus.getBonusID());
-            System.out.println("Retrieved ConsumableAttributeBonus: Bonus Percentage " + retrievedConsumableAttributeBonus.getBonusPercentage());
+            System.out.println("Retrieved ConsumableAttributeBonus: Bonus Percentage " + retrievedConsumableAttributeBonus.getBonusPercentage() +
+                    		   ", Bonus Cap " + retrievedConsumableAttributeBonus.getBonusCap());
             // Update the bonus value of ConsumableAttributeBonus
             ConsumableAttributeBonus updatedConsumableAttributeBonus = consumableAttributeBonusDao.update(retrievedConsumableAttributeBonus, 19.9, 199); 
             System.out.println("Updated ConsumableAttributeBonus: Bonus Percentage " + updatedConsumableAttributeBonus.getBonusPercentage() +
