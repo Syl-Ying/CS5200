@@ -3,11 +3,6 @@ package org.pm3.dal;
 import java.sql.*;
 import org.pm3.model.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 
 /**
  * 	DAO class for CharacterAttribute
