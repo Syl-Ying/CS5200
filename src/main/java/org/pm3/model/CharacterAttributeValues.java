@@ -11,26 +11,30 @@ public class CharacterAttributeValues {
         this.attributeValue = attributeValue;
     }
     
-    
+	// Getters and Setters
 	public int getCharacterID() {
 		return characterID;
 	}
+
 	public void setCharacterID(int characterID) {
 		this.characterID = characterID;
 	}
+
 	public int getAttributeID() {
 		return attributeID;
 	}
+
 	public void setAttributeID(int attributeID) {
 		this.attributeID = attributeID;
 	}
+
 	public int getAttributeValue() {
 		return attributeValue;
 	}
+	
 	public void setAttributeValue(int attributeValue) {
 		this.attributeValue = attributeValue;
 	}
-    
-    
+
 
 }

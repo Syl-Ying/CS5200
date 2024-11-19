@@ -196,9 +196,11 @@ public class Driver {
 
             // GearWeaponAttributeBonus
             // Create a new GearWeaponAttributeBonus
-            GearWeaponAttributeBonus newBonus = new GearWeaponAttributeBonus(1, 2, 50);
-            newBonus = gearWeaponAttributeBonusDao.create(newBonus);
-            System.out.println("Created GearWeaponAttributeBonus: Bonus Value " + newBonus.getBonusValue());
+            GearWeaponAttributeBonus newBonus1 = new GearWeaponAttributeBonus(1, 2, 50);
+            newBonus1 = gearWeaponAttributeBonusDao.create(newBonus1);
+            GearWeaponAttributeBonus newBonus2 = new GearWeaponAttributeBonus(2, 1, 60);
+            newBonus2 = gearWeaponAttributeBonusDao.create(newBonus2);
+            System.out.println("Created GearWeaponAttributeBonus: Bonus Value " + newBonus1.getBonusValue());
             // Retrieve the GearWeaponAttributeBonus by itemID and attributeID
             GearWeaponAttributeBonus retrievedBonus = gearWeaponAttributeBonusDao.getGWAByItemIdAndAttributeID(newBonus.getItemID(), newBonus.getAttributeID());
             System.out.println("Retrieved GearWeaponAttributeBonus: Bonus Value " + retrievedBonus.getBonusValue());
