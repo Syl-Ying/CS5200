@@ -150,13 +150,13 @@ public class Driver {
             // Create CharacterAttribute
 	        CharacterAttributeValues newValue1 = new CharacterAttributeValues(1, createdAttribute.getAttributeID(), 100);
 	        newValue1 = characterAttributeValuesDao.create(newValue1);
-	        System.out.println("Created CharacterAttributeValues01: " + newValue.getAttributeValue());
-            CharacterAttributeValues newValue2 = new CharacterAttributeValues(1, createdAttribute.getAttributeID(), 200);
+	        System.out.println("Created CharacterAttributeValues01: " + newValue1.getAttributeValue());
+            CharacterAttributeValues newValue2 = new CharacterAttributeValues(2, createdAttribute.getAttributeID(), 200);
 	        newValue2 = characterAttributeValuesDao.create(newValue2);
-	        System.out.println("Created CharacterAttributeValues02: " + newValue.getAttributeValue());
+	        System.out.println("Created CharacterAttributeValues02: " + newValue2.getAttributeValue());
             // Retrieve CharacterAttributeValues by CharacterID and AttributeID
-	        CharacterAttributeValues retrievedValue = characterAttributeValuesDao.getByCharAttrById(newValue.getCharacterID(), 
-                                                                                                    newValue.getAttributeID());
+	        CharacterAttributeValues retrievedValue = characterAttributeValuesDao.getByCharAttrById(newValue1.getCharacterID(), 
+                                                                                                    newValue1.getAttributeID());
 	        System.out.println("Retrieved CharacterAttributeValues: " + retrievedValue.getAttributeValue());
 
 
@@ -208,18 +208,32 @@ public class Driver {
             GearWeaponAttributeBonus updatedBonus = gearWeaponAttributeBonusDao.update(retrievedBonus, 999); 
             System.out.println("Updated GearWeaponAttributeBonus: Bonus Value " + updatedBonus.getBonusValue());
 
+            // GearWeaponAttributeBonus
+            // Create a new GearWeaponAttributeBonus
+            GearWeaponAttributeBonus newBonus1 = new GearWeaponAttributeBonus(1, 2, 50);
+            newBonus1 = gearWeaponAttributeBonusDao.create(newBonus1);
+            GearWeaponAttributeBonus newBonus2 = new GearWeaponAttributeBonus(2, 1, 60);
+            newBonus2 = gearWeaponAttributeBonusDao.create(newBonus2);
+            System.out.println("Created GearWeaponAttributeBonus: Bonus Value " + newBonus1.getBonusValue());
+            // Retrieve the GearWeaponAttributeBonus by itemID and attributeID
+            GearWeaponAttributeBonus retrievedBonus = gearWeaponAttributeBonusDao.getGWAByItemIdAndAttributeID(newBonus1.getItemID(), newBonus1.getAttributeID());
+            System.out.println("Retrieved GearWeaponAttributeBonus: Bonus Value " + retrievedBonus.getBonusValue());
+            // Update the bonus value of GearWeaponAttributeBonus
+            GearWeaponAttributeBonus updatedBonus = gearWeaponAttributeBonusDao.update(retrievedBonus, 999); 
+            System.out.println("Updated GearWeaponAttributeBonus: Bonus Value " + updatedBonus.getBonusValue());
+
             // ConsumableAttributeBonus
             // Create a new ConsumableAttributeBonus
-            ConsumableAttributeBonus newBonus = new ConsumableAttributeBonus(1, 1, 15.5, 670); 
+            ConsumableAttributeBonus newBonus = new ConsumableAttributeBonus(6, 1, 15.5, 670); 
             newBonus = consumableAttributeBonusDao.create(newBonus);
             System.out.println("Created ConsumableAttributeBonus: Bonus Percentage " + newBonus.getBonusPercentage());
             // Retrieve the ConsumableAttributeBonus by bonusID
-            ConsumableAttributeBonus retrievedBonus = consumableAttributeBonusDao.getConsuAttriByBonusId(newBonus.getBonusID());
-            System.out.println("Retrieved ConsumableAttributeBonus: Bonus Percentage " + retrievedBonus.getBonusPercentage());
+            ConsumableAttributeBonus retrievedConsumableAttributeBonus = consumableAttributeBonusDao.getConsuAttriByBonusId(newBonus.getBonusID());
+            System.out.println("Retrieved ConsumableAttributeBonus: Bonus Percentage " + retrievedConsumableAttributeBonus.getBonusPercentage());
             // Update the bonus value of ConsumableAttributeBonus
-            ConsumableAttributeBonus updatedBonus = consumableAttributeBonusDao.update(retrievedBonus, 19.9, 199); 
-            System.out.println("Updated ConsumableAttributeBonus: Bonus Percentage " + updatedBonus.getBonusPercentage() +
-                               ", Bonus Cap " + updatedBonus.getBonusCap());
+            ConsumableAttributeBonus updatedConsumableAttributeBonus = consumableAttributeBonusDao.update(retrievedConsumableAttributeBonus, 19.9, 199); 
+            System.out.println("Updated ConsumableAttributeBonus: Bonus Percentage " + updatedConsumableAttributeBonus.getBonusPercentage() +
+                               ", Bonus Cap " + updatedConsumableAttributeBonus.getBonusCap());
 
             // Create a new Inventory
             Inventory inventory1 = new Inventory(character2, newItem1, 10, 1);
@@ -273,6 +287,7 @@ public class Driver {
                     retrievedGearAllowedJobs.isAvaibility());
 
             // Delete
+            System.out.println("============= Delete ================");
             // Delete the CharacterJob
             characterJobDao.delete(createdCharacterJob.getCharacter().getCharacterID(),createdCharacterJob.getJob().getJobID());
             System.out.println("Deleted Character Job Pair = "+ createdCharacterJob.getCharacter().getCharacterFirstName() + createdCharacterJob.getJob().getJobName());
@@ -282,9 +297,9 @@ public class Driver {
             System.out.println("Deleted CharacterAttribute with ID: " + createdAttribute.getAttributeID());
 
             // Delete CharacterAttributeValues by CharacterID and AttributeID
-            characterAttributeValuesDao.delete(newValue);
-            System.out.println("Deleted CharacterAttributeValues with CharacterID: " + newValue.getCharacterID() +
-                               " and AttributeID: " + newValue.getAttributeID());
+            characterAttributeValuesDao.delete(newValue1);
+            System.out.println("Deleted CharacterAttributeValues with CharacterID: " + newValue1.getCharacterID() +
+                               " and AttributeID: " + newValue1.getAttributeID());
 
             // Delete the Player after character operations are completed
             playerDao.delete(createdPlayer);
