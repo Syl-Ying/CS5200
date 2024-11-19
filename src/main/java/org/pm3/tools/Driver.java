@@ -6,8 +6,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class Driver {
-	public static void main(String[] args) { 
-        // Initialize DAOs
+
+    public static void main(String[] args) throws SQLException {
+        // Initialize the PlayerDao and CharactersDao to perform database operations
         PlayerDao playerDao = PlayerDao.getInstance();
         CharactersDao charactersDao = CharactersDao.getInstance();
         JobDao jobDao = JobDao.getInstance();
@@ -164,8 +165,40 @@ public class Driver {
 	        System.out.println("Retrieved CharacterAttributeValues: " + retrievedValue.getAttributeValue());
 		} catch (SQLException e) {
             e.printStackTrace();
-        } 
-	}
-}
+        }
+        //Create Slottype
+        SlotType newSlotTypeforItem = new SlotType(1, "Waist");
+        SlotType createdSlotType = slotTypeDao.create(newSlotTypeforItem);
+        //Create Items
+        Item item1 = new Item("weapon1",50,newSlotTypeforItem,5000,true,"weapon");
+        Item item2 = new Item("weapon2",50,newSlotTypeforItem,5000,false,"weapon");
+        Item newItem1 = ItemDao.getInstance().create(item1);
+        Item newItem2 = ItemDao.getInstance().create(item2);
+        System.out.print("the new item id is: " + newItem1.getItemID()+". the new item name is: " +newItem1.getItemName() + ". new item max size is " + newItem1.getItemMaxStackSize()+". new item slottype is: " + newItem1.getSlotType().getSlotID() + ". vendor price is: " + newItem1.getItemVendorPrice() + " whether or not it is able to sell: " + newItem1.isAbleToSell()+" .item catrgory is: " + newItem1.getItemCategory());
+        Item returnItem1 = ItemDao.getInstance().getItembyId(item1.getItemID());
+        System.out.println();
+        System.out.print("the return item id is: " + returnItem1.getItemID()+". the new return item name is: " +returnItem1.getItemName() + ". new item max size is " + returnItem1.getItemMaxStackSize()+". new returnItem1 slottype is: " + returnItem1.getSlotType().getSlotID() + ". vendor price is: " + returnItem1.getItemVendorPrice() + " whether or not it is able to sell: " + returnItem1.isAbleToSell()+" .item catrgory is: " + returnItem1.getItemCategory() +"\n");
+        Weapon weapon1 = new Weapon("weapon3",30,createdSlotType,50,true,"weapon",5,10,2,3,4);
+        Weapon weaponReturn = WeaponDao.getInstance().create(weapon1);
+//        System.out.print("the return weapon id is: " + weaponReturn.getItemID()+". the new return weapon name is: " +weaponReturn.getItemName() + ". new weapon max size is " + weaponReturn.getItemMaxStackSize()+". new weapon slottype is: " + weaponReturn.getSlotType().getSlotID() + ". vendor price is: " + weaponReturn.getItemVendorPrice() + " whether or not it is able to sell: " + weaponReturn.isAbleToSell()+" .item catrgory is: " + weaponReturn.getItemCategory());
+//        System.out.println("The weapon itemLel is" + weaponReturn.getWeaponItemLevel()+"the weapon required level is" + weaponReturn.getWeaponRequiredLevel() + "the weapon damage done is " + weaponReturn.getWeaponDamageDone() +"the weapon auto attack is" + weaponReturn.getWeaponAutoAttack()+"weapon " );
+        System.out.println(weaponReturn.toString());
+        Weapon weaponbyId = WeaponDao.getInstance().getItembyId(18);
+        System.out.println(weaponbyId);
+
+        Gear gear1 = new Gear("gear1",30,createdSlotType,60,false,"gear",10,2,3,4);
+        //creaet a new gear
+        System.out.println(GearDao.getInstance().create(gear1));
+        //test get gear by gear id
+        System.out.println(GearDao.getInstance().getGearById(19));
+        Consumable consumable1 = new Consumable("consumable1",30, createdSlotType,60,false,"Consumable",2,10);
+        //create a new consumables
+        System.out.println(ConsumableDao.getInstance().create(consumable1));
+        //get consumable by id
+        System.out.println(ConsumableDao.getInstance().getConsumableById(20));
+    }
+
+} 
+
 
 
