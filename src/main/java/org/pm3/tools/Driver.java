@@ -206,21 +206,7 @@ public class Driver {
             System.out.println("Retrieved GearWeaponAttributeBonus: Bonus Value " + retrievedBonus.getBonusValue());
             // Update the bonus value of GearWeaponAttributeBonus
             GearWeaponAttributeBonus updatedBonus = gearWeaponAttributeBonusDao.update(retrievedBonus, 999); 
-            System.out.println("Updated GearWeaponAttributeBonus: Bonus Value " + updatedBonus.getBonusValue());
-
-            // GearWeaponAttributeBonus
-            // Create a new GearWeaponAttributeBonus
-//            GearWeaponAttributeBonus newBonus1 = new GearWeaponAttributeBonus(1, 2, 50);
-//            newBonus1 = gearWeaponAttributeBonusDao.create(newBonus1);
-//            GearWeaponAttributeBonus newBonus2 = new GearWeaponAttributeBonus(2, 1, 60);
-//            newBonus2 = gearWeaponAttributeBonusDao.create(newBonus2);
-//            System.out.println("Created GearWeaponAttributeBonus: Bonus Value " + newBonus1.getBonusValue());
-//            // Retrieve the GearWeaponAttributeBonus by itemID and attributeID
-//            GearWeaponAttributeBonus retrievedBonus = gearWeaponAttributeBonusDao.getGWAByItemIdAndAttributeID(newBonus1.getItemID(), newBonus1.getAttributeID());
-//            System.out.println("Retrieved GearWeaponAttributeBonus: Bonus Value " + retrievedBonus.getBonusValue());
-//            // Update the bonus value of GearWeaponAttributeBonus
-//            GearWeaponAttributeBonus updatedBonus = gearWeaponAttributeBonusDao.update(retrievedBonus, 999);
-//            System.out.println("Updated GearWeaponAttributeBonus: Bonus Value " + updatedBonus.getBonusValue());
+            System.out.println("Updated GearWeaponAttributeBonus: Bonus Value " + updatedBonus.getBonusValue())
 
             // ConsumableAttributeBonus
             // Create a new ConsumableAttributeBonus
