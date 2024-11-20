@@ -119,7 +119,8 @@ public class CharacterAttributeValuesDao {
             
             int affectedRows = deleteStmt.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("No records available to delete for attributeID=" + values.getAttributeID());
+                throw new SQLException("No records available to delete for attributeID=" + values.getAttributeID() + 
+                					   ", characterID=" + values.getCharacterID());
             }
             
             return null;
