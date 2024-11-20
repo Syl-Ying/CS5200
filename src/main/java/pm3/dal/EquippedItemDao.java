@@ -1,9 +1,9 @@
-package org.pm3.dal;
+package pm3.dal;
 
-import org.pm3.model.EquippedItem;
-import org.pm3.model.Characters;
-import org.pm3.model.SlotType;
-import org.pm3.model.Item;
+import pm3.model.EquippedItem;
+import pm3.model.Characters;
+import pm3.model.SlotType;
+import pm3.model.Item;
 
 import java.sql.*;
 import java.util.ArrayList;
