@@ -137,8 +137,51 @@ public class Driver {
             for (Currency currency : allCurrencies) {
                 System.out.println(currency.getCurrencyName());
             }
-        
-	     	// CharacterAttribute
+            
+            // CharacterCurrency
+            // 1. Retrieve an existing Character
+            Characters existingCharacterForCurrency = charactersDao.getCharacterByID(createdCharacter.getCharacterID());
+            System.out.println("Retrieved Character for Currency: ID = " + existingCharacterForCurrency.getCharacterID() +
+                ", Name: " + existingCharacterForCurrency.getCharacterFirstName());
+
+            // 2. Create a CharacterCurrency
+            CharacterCurrency newCharacterCurrency = new CharacterCurrency(existingCharacterForCurrency, createdCurrency, 5000.0, 200.0);
+            CharacterCurrency createdCharacterCurrency = CharacterCurrencyDao.getInstance().create(newCharacterCurrency);
+            System.out.println("Created CharacterCurrency: CharacterID = " + createdCharacterCurrency.getCharacter().getCharacterID() +
+                ", CurrencyID = " + createdCharacterCurrency.getCurrency().getCurrencyID() +
+                ", Total Amount = " + createdCharacterCurrency.getCurrencyTotalAmount() +
+                ", Earned This Week = " + createdCharacterCurrency.getCurrencyEarnedThisWeek());
+
+            // 3. Retrieve the CharacterCurrency by CharacterID and CurrencyID
+            CharacterCurrency retrievedCharacterCurrency = CharacterCurrencyDao.getInstance().getByCharacterIDAndCurrencyID(
+                existingCharacterForCurrency.getCharacterID(), createdCurrency.getCurrencyID());
+            if (retrievedCharacterCurrency != null) {
+                System.out.println("Retrieved CharacterCurrency: CharacterID = " + retrievedCharacterCurrency.getCharacter().getCharacterID() +
+                    ", CurrencyID = " + retrievedCharacterCurrency.getCurrency().getCurrencyID() +
+                    ", Total Amount = " + retrievedCharacterCurrency.getCurrencyTotalAmount() +
+                    ", Earned This Week = " + retrievedCharacterCurrency.getCurrencyEarnedThisWeek());
+            }
+
+            // 4. Update the CharacterCurrency
+            retrievedCharacterCurrency.setCurrencyTotalAmount(8000.0);
+            retrievedCharacterCurrency.setCurrencyEarnedThisWeek(300.0);
+            CharacterCurrency updatedCharacterCurrency = CharacterCurrencyDao.getInstance().update(retrievedCharacterCurrency);
+            System.out.println("Updated CharacterCurrency: CharacterID = " + updatedCharacterCurrency.getCharacter().getCharacterID() +
+                ", CurrencyID = " + updatedCharacterCurrency.getCurrency().getCurrencyID() +
+                ", Total Amount = " + updatedCharacterCurrency.getCurrencyTotalAmount() +
+                ", Earned This Week = " + updatedCharacterCurrency.getCurrencyEarnedThisWeek());
+
+            // 5. Retrieve all CharacterCurrencies for the Character
+            List<CharacterCurrency> allCharacterCurrencies = CharacterCurrencyDao.getInstance().getByCharacterID(existingCharacterForCurrency.getCharacterID());
+            System.out.println("All CharacterCurrencies for CharacterID = " + existingCharacterForCurrency.getCharacterID() + ":");
+            for (CharacterCurrency characterCurrency : allCharacterCurrencies) {
+                System.out.println("CurrencyID = " + characterCurrency.getCurrency().getCurrencyID() +
+                    ", Total Amount = " + characterCurrency.getCurrencyTotalAmount() +
+                    ", Earned This Week = " + characterCurrency.getCurrencyEarnedThisWeek());
+            }
+
+
+            // CharacterAttribute
             // Create CharacterAttribute
 	        CharacterAttribute newAttribute = new CharacterAttribute("Strength");
 	        CharacterAttribute createdAttribute = characterAttributeDao.create(newAttribute);
@@ -399,6 +442,11 @@ public class Driver {
             System.out.println("Item ID: " + retrievedHeadEquippedItem.getItem().getItemID());
             System.out.println("Item Name: " + retrievedHeadEquippedItem.getItem().getItemName());
 
+            // Delete the CharacterCurrency
+            CharacterCurrencyDao.getInstance().delete(existingCharacterForCurrency.getCharacterID(), createdCurrency.getCurrencyID());
+            System.out.println("Deleted CharacterCurrency: CharacterID = " + existingCharacterForCurrency.getCharacterID() +
+                ", CurrencyID = " + createdCurrency.getCurrencyID());
+            
             // Delete the CharacterJob
             characterJobDao.delete(createdCharacterJob.getCharacter().getCharacterID(),createdCharacterJob.getJob().getJobID());
             System.out.println("Deleted Character Job Pair = "+ createdCharacterJob.getCharacter().getCharacterFirstName() + createdCharacterJob.getJob().getJobName());
